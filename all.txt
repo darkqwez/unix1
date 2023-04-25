@@ -2410,3 +2410,31 @@ root@MUM084:~/Desktop# perl prime.pl
 root@MUM084:~/Desktop# perl prime.pl
  Enter number to check: 4
  4 is not prime
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Instructions for execution:
+•	Create a file with suitable name. Generally it's "filename.s
+•	Change its mode to 755
+•	Run it on prompt:
+$./filename.sh
+The .sh file contains Unix comands. For example see file and output
+Examples:
+Eg1: List.sh:
+ls-l
+Run : ./List.sh will out put:
+Directory contents
+: Makedir.sh:
+mkdir try
+cd try
+ls
+Run ./Makedir.sh will generate a directory called "try" in current directory and go to it and display it's contents. This will be nothing as of now
+ An ls-l command piped with wc will count No of words, lines etc in the directory
