@@ -1,0 +1,2412 @@
+Bourne Shell (Bash) Programming
+A shell program is a collection of a series of commands for Unix shell.
+No separate compiler is required to execute shell script as the shell itself interprets and executes them.
+To know the shell in your system type following command:
+nagveni@nagveni-H55M-S2V:~$ echo $SHELL
+/bin/bash
+Variables:
+we can assgin value to variable as follows:
+nagveni@nagveni-H55M-S2V:~$ x=3
+nagveni@nagveni-H55M-S2V:~$ y=5
+nagveni@nagveni-H55M-S2V:~$ expr $x + $y
+8
+nagveni@nagveni-H55M-S2V:~$ expr $x+$y //wrong command. Space required between operands and operators
+3+5
+nagveni@nagveni-H55M-S2V:~$ z=`expr $x+ $y` //wrong command. Space required between operands and operators
+expr: syntax error
+nagveni@nagveni-H55M-S2V:~$ echo $z
+nagveni@nagveni-H55M-S2V:~$ z=`expr $x+ $y` //wrong command. Space required between operands and operators
+expr: syntax error
+nagveni@nagveni-H55M-S2V:~$ z=`expr $x + $y`
+nagveni@nagveni-H55M-S2V:~$ echo $z
+8
+nagveni@nagveni-H55M-S2V:~$ expr 3+5 //wrong command. Space required between operands and operators
+3+5
+nagveni@nagveni-H55M-S2V:~$ expr 3 + 5
+8
+nagveni@nagveni-H55M-S2V:~$ expr 3 \* 5 //escape character is used for multiplication
+15
+nagveni@nagveni-H55M-S2V:~$ let x=15+10 //let is used for assigning values to the variables and also for evaluating them
+nagveni@nagveni-H55M-S2V:~$ echo $x
+25
+nagveni@nagveni-H55M-S2V:~$ echo $((15*10)) //double paranthesis is used instead of let
+150
+nagveni@nagveni-H55M-S2V:~$ factor //factor command is used to factorize the given number and print prime factors
+15
+15: 3 5
+28
+28: 2 2 7
+Writing shell scripts:
+1. comments should be preceded with #. Comment split over multiple lines must have # at the
+beginning of each line.
+2. More than one assignment can be done in single statement.
+3. Multiplication symbol must always be prceded by \.
+to type shell script open vi editor with following command:
+nagveni@nagveni-H55M-S2V:~$ vi dispmsg
+type the following code in editor:
+#!/bin/bash
+echo -n "Hello!" #-n suppresses the new line print
+echo "You are wellcome"
+echo "we are working in directory `pwd`" 
+echo "todays date is `date`"
+to run the program:
+nagveni@nagveni-H55M-S2V:~$ ./dispmsg
+bash: ./dispmsg: Permission denied
+Give execution permission to owner:
+nagveni@nagveni-H55M-S2V:~$ chmod 700 dispmsg
+nagveni@nagveni-H55M-S2V:~$ bash dispmsg
+Hello!You are wellcome
+we are working in directory /home/nagveni
+todays date is Sat Feb 24 11:50:52 IST 2018
+Another way to execute program:
+nagveni@nagveni-H55M-S2V:~$ ./dispmsg
+Hello!You are wellcome
+we are working in directory /home/nagveni
+todays date is Sat Feb 24 11:52:58 IST 2018
+Command line parameters:
+Shell scripts can read upto nine command line parameters. They are named as $1, $2, $3,...$9.
+Name of executable script is stored in $0.
+$# is the count of the number of arguments.
+$* represents all command line arguments.
+Type following code in vi editor:
+nagveni@nagveni-H55M-S2V:~$ vi commandparam
+#!/bin/bash
+echo "The number of parameters are $#"
+echo "The parameter are $*"
+echo "The parameters are $1 $2 $3"
+echo "The shell script command is $0"
+Run the program: 
+nagveni@nagveni-H55M-S2V:~$ bash commandparam a.txt 10 b.tst 25
+The number of parameters are 4
+The parameter are a.txt 10 b.tst 25
+The parameters are a.txt 10 b.tst
+The shell script command is commandparam
+Reading input from user:
+read command is used to read input typed by user into shell variables.
+Open readdemo file in vi editor and type following code
+nagveni@nagveni-H55M-S2V:~$ vi readdemo
+#!/bin/bash
+echo -n "Enter your first name "
+read f
+echo -n "Enter your last name "
+read l
+echo "Your name is $f $l"
+nagveni@nagveni-H55M-S2V:~$ bash readdemo
+Enter your first name shachi
+Enter your last name natu
+Your name is shachi natu
+create file samplefile.txt as below using vi editor:
+This is sample file.
+created forhell programmimg
+write a shell script to count number of lines in samplefile.txt
+nagveni@nagveni-H55M-S2V:~$ vi samplefile.txt
+This is sample file.
+created forhell programmimg
+nagveni@nagveni-H55M-S2V:~$ vi count
+#!/bin/bash
+echo "the number of lines in file samplefile.txt are: "
+echo `wc -l samplefile.txt`
+nagveni@nagveni-H55M-S2V:~$ bash count
+the number of lines in file samplefile.txt are: 
+2 samplefile.txt
+Write a shell script to print current system date.
+Instead of using vi editor, u can also write a script file in simple text editor and save it with extension .sh
+following script file called date.sh is created:
+#!/bin/bash
+m=`date +%d/%m/%y`
+echo "Current system date is $m"
+nagveni@nagveni-H55M-S2V:~$ bash date.sh
+Current system date is 24/02/18
+For loop in shell script:
+Syntax: for variable in list-of-variables
+ do
+command1
+command2
+..
+ done
+write a script in file for.sh to print values in range 1 to 5 using for loop.
+#!/bin/bash
+for x in 1 2 3 4 5
+do
+echo "The value of x is $x"
+done
+nagveni@nagveni-H55M-S2V:~$ bash for.sh
+The value of x is 1
+The value of x is 2
+The value of x is 3
+The value of x is 4
+The value of x is 5
+Write a program to print all files/directories in a current working directory.
+#!/bin/bash
+d=`pwd`
+echo "current working directory is $d"
+l=`ls $d`
+for x in $l
+do
+echo "The file name is $x"
+done
+save it as filesindir.sh.
+nagveni@nagveni-H55M-S2V:~$ bash filesindir.sh
+current working directory is /home/nagveni
+The file name is audch11.m
+The file name is audch11.m~~
+The file name is audiostegano.m
+The file name is auhide.m
+The file name is aurecover.m
+The file name is b01ae.wav
+The file name is b01ah.wav
+The file name is b01oa.wav
+The file name is b02ae.wav
+The file name is b02ei.wav
+The file name is b15oa.wav
+The file name is b15oo.wav
+The file name is BE%20WT%20Def-2017-18.xls_1ods
+The file name is bhakti.odt
+The file name is Brass_AH31.wav
+The file name is commandparam
+The file name is count
+The file name is date.sh
+The file name is date.sh~
+The file name is dectobin.m
+The file name is deja-dup
+The file name is Desktop
+The file name is dispmsg
+The file name is Documents
+The file name is Downloads
+The file name is examples.desktop
+The file name is fhss.m
+The file name is filesindir.sh
+The file name is filesindir.sh~
+The file name is Flute_A_51.wav
+The file name is for.sh
+The file name is Guitar_A_52.wav
+The file name is IDS.docx
+The file name is ls
+The file name is lsb-image.odt
+The file name is Music
+The file name is negation.m
+The file name is new2.wav
+The file name is New
+The file name is Folder
+The file name is ns-allinone-2.35
+The file name is ns-allinone-2.35(1)
+The file name is ns-allinone-2.35.tar.gz
+The file name is octave
+The file name is octave-workspace
+The file name is ofdm.m
+The file name is ofdm.odt
+The file name is Pictures
+The file name is Public
+The file name is readdemo
+The file name is samplefile.txt
+The file name is scenario1.nam
+The file name is scenario1.tr
+The file name is sensor.tcl
+The file name is sensor.tcl~
+The file name is Sitar_AH31.wav
+The file name is Templates
+The file name is testSignal.wav
+The file name is Videos
+The file name is watermark.wav
+the same code can be written without using for loop as follows:
+save it in filesindir1.sh
+#!/bin/bash
+l=`pwd|ls`
+echo "the list of files and directories in current working directory are $l"
+nagveni@nagveni-H55M-S2V:~$ bash filesindir1.sh
+the list of files and directories in current working directory are audch11.m
+audch11.m~~
+audiostegano.m
+auhide.m
+aurecover.m
+b01ae.wav
+b01ah.wav
+b01oa.wav
+b02ae.wav
+b02ei.wav
+b15oa.wav
+b15oo.wav
+BE%20WT%20Def-2017-18.xls_1ods
+bhakti.odt
+Brass_AH31.wav
+commandparam
+count
+date.sh
+date.sh~
+dectobin.m
+deja-dup
+Desktop
+dispmsg
+Documents
+Downloads
+examples.desktop
+fhss.m
+filesindir1.sh
+filesindir.sh
+filesindir.sh~
+Flute_A_51.wav
+for.sh
+Guitar_A_52.wav
+IDS.docx
+ls
+lsb-image.odt
+Music
+negation.m
+new2.wav
+New Folder
+ns-allinone-2.35
+ns-allinone-2.35(1)
+ns-allinone-2.35.tar.gz
+octave
+octave-workspace
+ofdm.m
+ofdm.odt
+Pictures
+Public
+readdemo
+samplefile.txt
+scenario1.nam
+scenario1.tr
+sensor.tcl
+sensor.tcl~
+Sitar_AH31.wav
+Templates
+testSignal.wav
+Videos
+watermark.wav
+Same code can also be written as:
+#!/bin/bash
+for l in `ls $pwd`
+do
+echo "$l"
+done
+ or
+#!/bin/bash
+for l in `ls`
+do
+echo "$l"
+done
+Write a shell script to display all files and directories starting with letter 'b'
+#!/bin/bash
+for l in b*
+do
+echo "the list of files and directories in current working directory are $l"
+done
+Write a shell script to display names of .sh files starting with f
+#!/bin/bash
+for l in `ls f*.sh`
+do
+echo "$l"
+done
+nagveni@nagveni-H55M-S2V:~$ bash filesindir1.sh
+filesindir1.sh
+filesindir.sh
+for.sh
+Write a shell script to display contents of .sh files starting with f
+#!/bin/bash
+for l in ls f*.sh
+do
+cat $l
+done
+while loop in Shell programming:
+syntax:
+while [logical expression]
+do
+..
+..
+done
+IF statement in shell programming
+syntax:
+if [logical expression]
+then
+..
+..
+else
+..
+fi
+Write a shell script to display numbers from 1 to 10
+#!/bin/bash
+n=1
+while [ $n -le 10 ]
+do
+echo $n
+(( n++ ))
+done
+Write a shell script to develope scientific calculator
+#!/bin/bash
+sum=0
+i="y"
+echo " Enter one no."
+read n1
+echo "Enter second no."
+read n2
+while [ $i = "y" ]
+do
+echo "1.Addition"
+echo "2.Subtraction"
+echo "3.Multiplication"
+echo "4.Division"
+echo "Enter your choice"
+read ch
+case $ch in
+ 1)sum=`expr $n1 + $n2`
+ echo "Sum ="$sum;;
+ 2)sum=`expr $n1 - $n2`
+ echo "Sub = "$sum;;
+ 3)sum=`expr $n1 \* $n2`
+ echo "Mul = "$sum;;
+ 4)sum=`expr $n1 / $n2`
+ echo "Div = "$sum;;
+ *)echo "Invalid choice";;
+esac
+echo "Do u want to continue ?"
+read i
+if [ $i != "y" ]
+then
+ exit
+fi
+done 
+Output:
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash cal.sh
+ Enter one no.
+5
+Enter second no.
+6
+1.Addition
+2.Subtraction
+3.Multiplication
+4.Division
+Enter your choice
+1
+Sum =11
+Do u want to continue ?
+2
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash cal.sh
+ Enter one no.
+5
+Enter second no.
+6
+1.Addition
+2.Subtraction
+3.Multiplication
+4.Division
+Enter your choice
+1
+Sum =11
+Do u want to continue ?
+y
+1.Addition
+2.Subtraction
+3.Multiplication
+4.Division
+Enter your choice
+2
+Sub = -1
+Do u want to continue ?
+y
+1.Addition
+2.Subtraction
+3.Multiplication
+4.Division
+Enter your choice
+3
+Mul = 30
+Do u want to continue ?
+y
+1.Addition
+2.Subtraction
+3.Multiplication
+4.Division
+Enter your choice
+4
+Div = 0
+Do u want to continue ?
+Y
+Until loop in shell programming:
+ The untill loop is used for repeating the set of instructions for the time the specified logical expression is
+false. The moment the logical expression becomes true, the control will come outof loop.
+Syntax:
+until logical_expression
+do
+..
+...
+done
+example:
+Write a shell script to print sum of even numbers upto 50
+#!/bin/bash
+s=0
+n=2
+until [ $n -gt 50 ]
+do
+s=$(( $s + $n )) 
+((n+=2))
+echo $n
+done
+echo $s
+Output:
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash evensum.sh
+4
+6
+8
+10
+12
+14
+16
+18
+20
+22
+24
+26
+28
+30
+32
+34
+36
+38
+40
+42
+44
+46
+48
+50
+52
+650
+test command in shell:
+The test command returns true if the expression included is valid otherwise returns false.
+Test command can be used to test various file attributes like whether file has read, write or executable
+permission or whether it is a file or directory etc.
+Option Description
+-a filename Returns true if file has at least one character
+-e filename Returns true if file exists
+-f filename Returns true if file exists and is a regular file
+-r filename Returns true if file has read permission
+-w filename Returns true if file has write permission
+-x filename Returns true if file is executable
+-d filename Returns true if file exists and is a directory
+-s filename Returns true if file exists and has size greater than zero
+Write a program to check whether give file name is file or directory
+#!/bin/bash
+echo -n "Enter filename: "
+read fname
+if test -d $fname 
+then
+ echo "$fname is a directory"
+else
+ if test -f $fname 
+then
+ echo "$fname is a file"
+ else
+ echo "$fname is not valid"
+ exit 1
+ fi
+fi
+#!/bin/bash
+PASSED=$1
+if [ -d "$1" ] ; then
+ echo "$1 is a directory";
+else
+ if [ -f "${PASSED}" ]; then
+ echo "${PASSED} is a file";
+ else
+ echo "${PASSED} is not valid";
+ exit 1
+ fi
+fi
+Output:
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash filedir.sh while.sh
+while.sh is a file
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash filedir.sh while.sh
+while.sh is a file
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash filedir.sh WT
+WT is a directory
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash filedir.sh WT
+WT is a directory
+Arrays in shell script
+the syntax of array initialization −
+array_name = (value1 ... valuen)
+Other way to initialize array is
+array=( [index]=<value> [index]=<value> . . . )
+We can also read/assign values to array during the execution time using the read shell-builtin.
+read -a array
+Now upon executing the above statement inside a script, it waits for some input. We need to provide the 
+array elements separated by space (and not carriage return). After entering the values press enter to 
+terminate.
+accessing array element
+you access it as follows −
+${array_name[index]}
+Sample script to access array elements
+#!/bin/sh
+NAME=(Zara Qadir Mahnaz Ayan Daisy)
+echo "First Index: ${NAME[0]}"
+echo "Second Index: ${NAME[1]}"
+OR
+#!/bin/sh
+NAME[0]="Zara"
+NAME[1]="Qadir"
+NAME[2]="Mahnaz"
+NAME[3]="Ayan"
+NAME[4]="Daisy"
+echo "First Index: ${NAME[0]}"
+echo "Second Index: ${NAME[1]}"
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash array.sh
+First Index: Zara
+Second Index: Qadir
+Write a shell script to check whether element is present in array
+#!/bin/sh
+echo -n "enter elements of array"
+read -a array
+echo -n "enter the element to be searched"
+read num
+for val in "${array[@]}" 
+do
+if [ $num == $val ]
+then
+echo "element is present in the array"
+exit
+else
+continue
+#echo "element is not present in the array"
+fi
+done
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash list.sh
+enter elements of array1 2 3 4 5
+enter the element to be searched3
+element is present in the array
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash list.sh
+enter elements of array1 2 3 4 5
+enter the element to be searched6
+nagveni@nagveni-H55M-S2V:~/Desktop$ 
+Write a shell script to check whether two strings entered by user are equal or not
+#!/bin/bash
+echo -n "Enter first string: "
+read str1
+echo -n "enter second string: "
+read str2
+if [ $str1 = $str2 ]
+then
+echo " Two stringa are equal"
+else
+echo " Two strings are not equal "
+fi
+Output:
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash string.sh 
+Enter first string: s1
+enter second string: s2
+ Two strings are not equal 
+Functions in shell programming:
+Syntax to write a function:
+function_name ()
+{
+statement
+statement
+..
+}
+Write a function to print sum of sequence of numbers. Limit of sequence will be entered by user.
+#!/bin/bash
+sum()
+{
+s=0
+x=1
+while test $x -le $1
+do
+((s=$s+$x))
+((x=$x+1))
+done
+return $s
+}
+sum $1
+echo "The sum of sequence is : $?"
+Output: 
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash seqsum.sh 5
+The sum of sequence is : 15
+same program can be written by taking input from user as: 
+#!/bin/bash
+sum()
+{
+s=0
+x=1
+while test $x -le $l
+do
+((s=$s+$x))
+((x=$x+1))
+done
+return $s
+}
+echo " Enter limit of sequence"
+read l
+sum $l
+echo "The sum of sequence is : $?"
+Output: 
+nagveni@nagveni-H55M-S2V:~/Desktop$ bash seqsum.sh 
+ Enter limit of sequence
+5
+The sum of sequence is : 15
+Another way of writing the same program where returned value is stored in variable x.
+#!/bin/bash
+sum()
+{
+s=0
+x=1
+while test $x -le $l
+do
+((s=$s+$x))
+((x=$x+1))
+done
+return $s
+}
+echo " Enter limit of sequence"
+read l
+#sum $1
+sum $l
+x=$?
+echo "The sum of sequence is : $x"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SED command in UNIX
+Stream Editor: a non interactive editor used for filtering out the desired data from the
+specified file.
+It reads input sequentially, applies the operations specified via the command line or a
+sed script and directs the processed data to the standard output.
+The instruction is a combination of two components: an address and a command.
+Address contains the filter condition that is applied on the data stream to extract the
+desired data.
+The address in a syntax refers to the range of data of the file on which we wish to
+apply the desired action.
+Two ways of addressing the lines:
+1. By line number.
+2. By specifying a pattern that occures in a line
+Command is applied on the desired data for processing.
+Syntax: sed options 'address action' file(s)
+options:
+-n suppresses duplicate line printing
+-f Reads instruction from a file
+-e Interpretes the next string as an instruction or a set of instructions.
+Create file bank.lst with following data in editor and then run sed command on it.
+Bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Q. Print first 3 records from bank.lst
+root@MUM084:~/Desktop# sed '3q' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+Note: By default sed prints all lines to the standard output.
+root@MUM084:~/Desktop# sed '3p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman 0 20/08/2009 current
+103 Naman 0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,2p' bank.lst
+101 Aditya0 14/11/2000 current
+101 Aditya0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Use -n to suppress duplicate line printing.
+root@MUM084:~/Desktop# sed -n '1,2p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+root@MUM084:~/Desktop# sed -n '1,4p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+root@MUM084:~/Desktop# sed -n '4,7p' bank.lst
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+Note : $ represents the last record in file.
+root@MUM084:~/Desktop# sed -n '$p' bank.lst
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '1,2p
+> 7,9p
+> $p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '3,$!p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+root@MUM084:~/Desktop# sed -n '$!p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# sed -n '2,5!p' bank.lst
+101 Aditya 0 14/11/2000 current
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n -e '1,2p' -e '7,9p' -e '$p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# cat > instr.fil
+1,2p
+7,9p
+$p
+root@MUM084:~/Desktop# sed -n -f instr.fil bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/current/p' bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+root@MUM084:~/Desktop# sed -n '/current/,/saving/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+root@MUM084:~/Desktop# sed -n '1,/current/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+root@MUM084:~/Desktop# sed -n '3,/current/p' bank.lst
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '3,/Current/p' bank.lst
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+root@MUM084:~/Desktop# sed -n '3,/saving/p' bank.lst
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+root@MUM084:~/Desktop# sed -n '/[cC]urrent/p' bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Writing to other file:
+root@MUM084:~/Desktop# sed -n '/[cC]urrent/w clist.lst' bank.lst
+root@MUM084:~/Desktop# cat clist.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# sed -n '1,4w clist.lst' bank.lst
+root@MUM084:~/Desktop# cat clist.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+Inserting into file
+root@MUM084:~/Desktop# sed '1i 201 Viren 2000 13/05/2012 saving' bank.lst > newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+201 Viren 2000 13/05/2012 saving
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# cat bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '1,/saving/p' newbank.lst
+201 Viren 2000 13/05/2012 saving
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+root@MUM084:~/Desktop# sed '4i 204 Viren 2000 13/05/2012 saving' bank.lst > newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+204 Viren 2000 13/05/2012 saving
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '4i\
+> 206 viraj 3000 14/01/2011 current
+> ' bank.lst >newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+206 viraj 3000 14/01/2011 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '4a\
+206 viraj 3000 14/01/2011 current
+' bank.lst >newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+206 viraj 3000 14/01/2011 current
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed 'a\
+' bank.lst > newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed 'i\
+' bank.lst > newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed 'i\
+This is blank line
+' bank.lst > newbank.lst
+root@MUM084:~/Desktop# cat newbank.lst
+This is blank line
+101 Aditya 0 14/11/2000 current
+This is blank line
+102 Anil 10000 20/05/2011 saving
+This is blank line
+103 Naman0 20/08/2009 current
+This is blank line
+104 Ram 10000 15/08/2010 saving
+This is blank line
+105 Jyotsna 5000 16/06/2012 saving
+This is blank line
+106 Mukesh 14000 20/12/2009 Current
+This is blank line
+107 Vishal 14500 30/11/2011 saving
+This is blank line
+108 Chirag 0 15/12/2012 Current
+This is blank line
+109 Arya 16000 14/12/2010 Current
+This is blank line
+110 Priya 130 16/11/2009 Saving
+Deleting a line having specific pattern:
+root@MUM084:~/Desktop# sed '/viraj/d' newbank.lst
+This is blank line
+101 Aditya 0 14/11/2000 current
+This is blank line
+102 Anil 10000 20/05/2011 saving
+This is blank line
+103 Naman0 20/08/2009 current
+This is blank line
+104 Ram 10000 15/08/2010 saving
+This is blank line
+105 Jyotsna 5000 16/06/2012 saving
+This is blank line
+106 Mukesh 14000 20/12/2009 Current
+This is blank line
+107 Vishal 14500 30/11/2011 saving
+This is blank line
+108 Chirag 0 15/12/2012 Current
+This is blank line
+109 Arya 16000 14/12/2010 Current
+This is blank line
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '/This is blank line/d' newbank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Substitution: 
+root@MUM084:~/Desktop# sed 's/\t/ /' bank.lst
+this command substitues first occurence of \t by space in each line
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+to replace all occurences of \t by space: 
+root@MUM084:~/Desktop# sed 's/\t/ /g' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed 's/ /\t/g' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,3s/ /\t/g' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,3s/\t/ /g' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,3s/ /\t/g' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,3s/current /demat/' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed '1,3s/current/demat/' bank.lst
+101 Aditya 0 14/11/2000 demat
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 demat
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Remembered Patterns in sed
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)\([a-z]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)\([a-z]*\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)\([Dd]*\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([Cc]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# sed -n '/\([Pp]\)/p' bank.lst
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([A]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# sed -n '/\([^Pp]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)\([d]\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+root@MUM084:~/Desktop# sed -n '/\([Aa]\)\([n]\)/p' bank.lst
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+root@MUM084:~/Desktop# sed -n '/\([i]\)\([a-z]*\)/p' bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GREP command in UNIX
+root@MUM084:~# cd Desktop
+root@MUM084:~/Desktop# ls
+a.out expressiontree.c~ linkedlistt.c~ s2179.c~
+bank.lst heap.c~ LL1.c~ sadfs.c~
+bank.txt heapsort.c~ LL.c~ shachi
+bfs.c~ infix.c~ Mergesort.txt~ SJF1.c~
+BFS.c~ Infixtopostfix.c~ newbank.lst SJF.c~
+clist.lst instr.fil Que.c~ SRTN.c~
+convolution.java~ ITU.java~ queue.c~ SRTN.C~
+dequeue.c~ ks.java~ queuelist.c~ Untitled Folder
+Expression.c~ linkedlist.c~ round.c~
+root@MUM084:~/Desktop# man grep
+root@MUM084:~/Desktop# cat bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Search lines containing the pattern 'mu' in file bank.lst
+root@MUM084:~/Desktop# grep mu bank.lst
+Since mu is not there in bank.lst, it displays nothing on screen
+Search lines containing the pattern 'Mu' in file bank.lst
+root@MUM084:~/Desktop# grep Mu bank.lst
+106 Mukesh 14000 20/12/2009 Current
+Search lines containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep current bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+Search lines containing the pattern 'Current' in file bank.lst
+root@MUM084:~/Desktop# grep Current bank.lst
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Search lines containing the pattern 'Mu' in file bank.lst and bnk.lst
+root@MUM084:~/Desktop# grep Current bank.lst bnk.lst
+bank.lst:106 Mukesh 14000 20/12/2009 Current
+bank.lst:108 Chirag 0 15/12/2012 Current
+bank.lst:109 Arya 16000 14/12/2010 Current
+grep: bnk.lst: No such file or directory
+Search lines containing the pattern 'Chirag' in file bank.lst
+root@MUM084:~/Desktop# grep 'Chirag' bank.lst
+108 Chirag 0 15/12/2012 Current
+OR
+root@MUM084:~/Desktop# grep Chirag bank.lst
+108 Chirag 0 15/12/2012 Current
+Count the number of lines containing the pattern 'Current' in file bank.lst
+root@MUM084:~/Desktop# grep -c Current bank.lst
+3
+Count the number of lines containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep -c current bank.lst
+2
+Display line numbers along with lines containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep -n current bank.lst
+1:101 Aditya 0 14/11/2000 current
+3:103 Naman0 20/08/2009 current
+Display llines not containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep -v current bank.lst
+102 Anil 10000 20/05/2011 saving
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+List the file names containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep -l current *.lst
+bank.lst
+clist.lst
+newbank.lst
+List the file names not containing the pattern 'current' in file bank.lst
+root@MUM084:~/Desktop# grep -L current *.java~
+convolution.java~
+ITU.java~
+ks.java~
+Search lines containing the pattern 'Current' or 'current' in file bank.lst (i.e. case insensitive)
+root@MUM084:~/Desktop# grep -i current bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Search lines containing the pattern 'Current' or 'current' in file bank.lst (i.e. case insensitive)
+Here -e is used to indicate OR.
+root@MUM084:~/Desktop# grep -e current -e Current bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Prints 2 lines before and after the line containing pattern 'Jyotsna'
+root@MUM084:~/Desktop# grep -2 -i Jyotsna bank.lst
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+Prints 2 lines before and after the line containing pattern 'current' or 'Current'
+root@MUM084:~/Desktop# grep -2 -i current bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Prints 2 lines before and after the line containing pattern 'Priya'
+root@MUM084:~/Desktop# grep -2 -i Priya bank.lst
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+OR
+root@MUM084:~/Desktop# grep -2 -i priya bank.lst
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Prints lines containing letter 'r'
+root@MUM084:~/Desktop# grep r bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+OR
+root@MUM084:~/Desktop# grep "r" bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Prints lines containing letter 'd'
+root@MUM084:~/Desktop# grep "d" bank.lst
+101 Aditya 0 14/11/2000 current
+Prints lines containing letter 'D'
+root@MUM084:~/Desktop# grep "D" bank.lst
+Display all records that have or do not have letter 'D'
+root@MUM084:~/Desktop# grep "D*" bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Display all records that have or do not have letter 'b'
+root@MUM084:~/Desktop# grep "b*" bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Display all records starting with 1
+root@MUM084:~/Desktop# grep "^1" bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Display all records ending with 'nt'
+root@MUM084:~/Desktop# grep "nt$" bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Display all records starting with 11
+root@MUM084:~/Desktop# grep "^11" bank.lst
+110 Priya 130 16/11/2009 Saving
+Display all records containing Current or current
+root@MUM084:~/Desktop# grep [Cc]urrent bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+Display all records containing current without the file names on its left
+root@MUM084:~/Desktop# grep -h current bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+Display all records containing current from all .lst files with file names on its left.
+root@MUM084:~/Desktop# grep -H current *.lst
+bank.lst:101 Aditya 0 14/11/2000 current
+bank.lst:103 Naman0 20/08/2009 current
+clist.lst:101 Aditya 0 14/11/2000 current
+clist.lst:103 Naman0 20/08/2009 current
+newbank.lst:101 Aditya 0 14/11/2000 current
+newbank.lst:103 Naman0 20/08/2009 current
+Display all records containing pattern current. Five dots (.....) implies that any five characters
+having 'nt' at the end are displayed.
+root@MUM084:~/Desktop# grep .....nt bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+106 Mukesh 14000 20/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# grep ..ya bank.lst
+101 Aditya 0 14/11/2000 current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# grep ...ya bank.lst
+101 Aditya 0 14/11/2000 current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# grep ....ya bank.lst
+101 Aditya 0 14/11/2000 current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# grep .....ya bank.lst
+101 Aditya 0 14/11/2000 current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# grep ......ya bank.lst
+101 Aditya 0 14/11/2000 current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+root@MUM084:~/Desktop# grep .......ya bank.lst
+101 Aditya 0 14/11/2000 current
+110 Priya 130 16/11/2009 Saving
+Display all records containing pattern di.ya (a letter between di and ya)
+root@MUM084:~/Desktop# grep di.ya bank.lst
+101 Aditya 0 14/11/2000 current
+root@MUM084:~/Desktop# grep A.a bank.lst
+Display all records containing pattern that starts with A, ends with a and inbetween contains any
+two letters.
+root@MUM084:~/Desktop# grep A..a bank.lst
+109 Arya 16000 14/12/2010 Current
+root@MUM084:~/Desktop# grep A....a bank.lst
+101 Aditya 0 14/11/2000 current
+Display all records containing pattern that starts with A, ends with a and inbetween contains any
+number of characters.
+root@MUM084:~/Desktop# grep A.*a bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+109 Arya 16000 14/12/2010 Current
+Write the pattern to be searched in a file pattern.txt. Pass this file using -f option in grep command
+from where pattern will be read and searched.
+root@MUM084:~/Desktop# cat >pattern.txt
+current
+Saving
+^d
+root@MUM084:~/Desktop# grep -f pattern.txt bank.lst
+root@MUM084:~/Desktop# grep -f pattern.txt bank.lst
+101 Aditya 0 14/11/2000 current
+103 Naman0 20/08/2009 current
+110 Priya 130 16/11/2009 Saving
+Append few records as shown below to bank.lst file
+root@MUM084:~/Desktop# cat >> bank.lst
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+Check the contents of file.
+root@MUM084:~/Desktop# cat bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+List all records whose customer number starts with 2. 
+If following command is given, it will give wrong output.
+root@MUM084:~/Desktop# grep 2.. bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+Since customer number is the field with which record starts, we must give command that tells to
+search pattern at the beginning of the line.
+root@MUM084:~/Desktop# grep ^2 bank.lst
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+To negate the above search, place ^ before the square bracket as shown below:
+root@MUM084:~/Desktop# grep ^[^2] bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Following command will list all those records in which 2 occurs anywhere in row.
+root@MUM084:~/Desktop# grep [^2] bank.lst
+101 Aditya 0 14/11/2000 current
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+Hina 204 30000 14/02/2014 saving
+Kalpana 205 4000 8/9/2007 Current
+To print lines which do not start with digit in range 2 to 3
+root@MUM084:~/Desktop# grep ^[^2-3] bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+Hina 204 30000 14/02/2014 saving
+Kalpana 205 4000 8/9/2007 Current
+To print all records containing letters in the range H to K
+root@MUM084:~/Desktop# grep [H-K] bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+105 Jyotsna 5000 16/06/2012 saving
+Hina 204 30000 14/02/2014 saving
+Kalpana 205 4000 8/9/2007 Current
+To print lines begining with letter in the range H to K
+root@MUM084:~/Desktop# grep ^[H-K] bank.lst
+Hina 204 30000 14/02/2014 saving
+Kalpana 205 4000 8/9/2007 Current
+To print lines which do not start with letters in range H to K
+root@MUM084:~/Desktop# grep ^[^H-K] bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 10000 20/05/2011 saving
+103 Naman0 20/08/2009 current
+104 Ram 10000 15/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 14000 20/12/2009 Current
+107 Vishal 14500 30/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 16000 14/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+root@MUM084:~/Desktop# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AWK command in UNIX
+AWK command is a programming language that is executed byAWK interpreter. 
+Syntax for using AWK command is:
+AWK option '/pattern/ {action}' file _name
+option is optional. AWK command must have either pattern or action or both. 
+If pattern is not specified, it will be entire line.
+If action is not specified, by default it is print.
+Print all records of file Bank.lst
+root@MUM084:~/Desktop# awk '{print}' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 1000020/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 1000015/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 1400020/12/2009 Current
+107 Vishal 1450030/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+Hina 204 3000014/02/2014 saving
+Kalpana 205 4000 8/9/2007 Current
+301 Nikhil 7777 8/9/1999 saving
+Print first 3 fields (acc no., name and balance) from bank.lst (field 1 is referred by $1
+and so on.)
+root@MUM084:~/Desktop# awk '{print $1 $2 $3}' bank.lst
+101ADITYA0
+102Anil10000
+103Naman0
+104Ram10000
+105Jyotsna5000
+106Mukesh14000
+107Vishal14500
+108Chirag0
+109Arya16000
+110Priya130
+201Bina3000
+202Diya4000
+203Gargi2000
+Hina20430000
+Kalpana2054000
+301Nikhil7777
+Sepearate fields by tabs.
+root@MUM084:~/Desktop# awk '{print $1 "\t" $2 "\t" $3}' bank.lst
+101 ADITYA 0
+102 Anil 10000
+103 Naman 0
+104 Ram 10000
+105 Jyotsna 5000
+106 Mukesh 14000
+107 Vishal 14500
+108 Chirag 0
+109 Arya 16000
+110 Priya 130
+201 Bina 3000
+202 Diya 4000
+203 Gargi 2000
+Hina 204 30000
+Kalpana 205 4000
+301 Nikhil 7777
+Print only those records having 'current' account.
+root@MUM084:~/Desktop# awk '/current/ {print}' bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+OR
+root@MUM084:~/Desktop# awk '/current/' bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+OR
+root@MUM084:~/Desktop# awk /current/ bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+Format specifiers for the field can be specified as below:
+bank.lst^Croot@MUM084:~/Desktop# awk '{printf "%3d \t %-15s \t %7d \n", $1,
+$2, $3}' bank.lst
+101 ADITYA 0 
+102 Anil 10000 
+103 Naman 0 
+104 Ram 10000 
+105 Jyotsna 5000 
+106 Mukesh 14000 
+107 Vishal 14500 
+108 Chirag 0 
+109 Arya 16000 
+110 Priya 130 
+201 Bina 3000 
+202 Diya 4000 
+203 Gargi 2000 
+204 Hina 30000 
+205 Kalpana 4000 
+301 Nikhil 7777 
+Printing records having 'current' account. $0 means entire line.
+root@MUM084:~/Desktop# awk '/current/ {print $0}' bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+Printing individual fields of file. 
+root@MUM084:~/Desktop# awk '/current/ {print $1}' bank.lst
+103
+203
+root@MUM084:~/Desktop# awk '/current/ {print $2}' bank.lst
+Naman
+Gargi
+Print records having balance less than 5000. (here $3 represents the 3rd field balance)
+root@MUM084:~/Desktop# awk '$3<5000' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+103 Naman 0 20/08/2009 current
+108 Chirag 0 15/12/2012 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+'OR'ing two conditions.
+Print records having balance less than 5000 or more than 10000
+root@MUM084:~/Desktop# awk '$3<5000 || $3>10000' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+107 Vishal 1450030/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+204 Hina 3000014/02/2014 saving
+205 Kalpana 4000 8/9/2007 Current
+Print records having balance less than 8000 and more than 3000
+root@MUM084:~/Desktop# awk '$3>3000&&$3<8000 {print $1, $2, $3}' bank.lst
+105 Jyotsna 5000
+202 Diya 4000
+205 Kalpana 4000
+301 Nikhil 7777
+Print all records whose account type is current.
+root@MUM084:~/Desktop# awk '$5 == "current"' bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+Print all records whose account type is Current.
+root@MUM084:~/Desktop# awk '$5 == "Current"' bank.lst
+106 Mukesh 1400020/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+205 Kalpana 4000 8/9/2007 Current
+Print all records whose account type is not Current.
+root@MUM084:~/Desktop# awk '$5 != "Current"' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 1000020/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 1000015/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 1450030/11/2011 saving
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+204 Hina 3000014/02/2014 saving
+301 Nikhil 7777 8/9/1999 saving
+Print records whose acc. type is 'current''
+root@MUM084:~/Desktop# awk '$5 ~/current/' bank.lst
+103 Naman 0 20/08/2009 current
+203 Gargi 2000 21/01/2015 current
+Print records whose acc. type is 'saving'
+root@MUM084:~/Desktop# awk '$5 ~/saving/' bank.lst
+102 Anil 1000020/05/2011 saving
+104 Ram 1000015/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 1450030/11/2011 saving
+201 Bina 3000 11/03/2010 saving
+204 Hina 3000014/02/2014 saving
+301 Nikhil 7777 8/9/1999 saving
+Print records whose acc. type is not 'saving'
+root@MUM084:~/Desktop# awk '$5 !~/saving/' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+Print records not ending with character 'g'
+root@MUM084:~/Desktop# awk '$5 !~/g$/' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+Print records ending with character 'g'
+root@MUM084:~/Desktop# awk '$5 ~/g$/' bank.lst
+102 Anil 1000020/05/2011 saving
+104 Ram 1000015/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+107 Vishal 1450030/11/2011 saving
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+204 Hina 3000014/02/2014 saving
+301 Nikhil 7777 8/9/1999 saving
+Print names of customers having saving account.
+root@MUM084:~/Desktop# awk '$5 ~/saving/{print $2}' bank.lst
+Anil
+Ram
+Jyotsna
+Vishal
+Bina
+Hina
+Nikhil
+Display records whose account type is current or Current
+root@MUM084:~/Desktop# awk '$5~/[Cc]urrent/' bank.lst
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+Display those records whose account type field end ith letter t or T
+root@MUM084:~/Desktop# awk '$5~/[Tt]$/' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+Display account number, name and balance of those records whose account type field end ith letter t
+or T
+root@MUM084:~/Desktop# awk '$5~/[Tt]$/{print $1, $2, $3}' bank.lst
+101 ADITYA 0
+103 Naman 0
+106 Mukesh 14000
+108 Chirag 0
+109 Arya 16000
+203 Gargi 2000
+205 Kalpana 4000
+Display records from record number 3 to record number 7.
+root@MUM084:~/Desktop# awk 'NR>=3 && NR<=7 {print $1, $2, $3}' bank.lst
+103 Naman 0
+104 Ram 10000
+105 Jyotsna 5000
+106 Mukesh 14000
+107 Vishal 14500 
+Display records from record no. 2 to record no.8.
+root@MUM084:~/Desktop# awk 'NR==2, NR==8 {print $1, $2, $3}' bank.lst
+102 Anil 10000
+103 Naman 0
+104 Ram 10000
+105 Jyotsna 5000
+106 Mukesh 14000
+107 Vishal 14500
+108 Chirag 0
+Display acc. No, name and balance of records having record no. 2 or record no.8
+along with record no.
+root@MUM084:~/Desktop# awk 'NR==2 || NR==8 {print NR, $1, $2, $3}' bank.lst
+2 102 Anil 10000
+8 108 Chirag 0
+display name with record no. Having record no less than 2 and more than 8. 
+root@MUM084:~/Desktop# awk 'NR<2 || NR>8 {print NR, $2}' bank.lst
+1 ADITYA
+9 Arya
+10 Priya
+11 Bina
+12 Diya
+13 Gargi
+14 Hina
+15 Kalpana
+16 Nikhil
+Create text.lst file as shown below:
+root@MUM084:~/Desktop# cat > text.lst
+This is unix operating system
+we are studying AWK scripts
+It appears to be very interesting
+Print number of fields in each line /record of the file text.lst
+root@MUM084:~/Desktop# awk '{print NF}' text.lst
+5
+5
+6
+Print last field of each line in text.lst
+root@MUM084:~/Desktop# awk '{print $NF}' text.lst
+system
+scripts
+interesting
+Print last field of each line in bank.lst
+root@MUM084:~/Desktop# awk '{print $NF}' bank.lst
+CURRENT
+saving
+current
+saving
+saving
+Current
+saving
+Current
+Current
+Saving
+saving
+Saving
+current
+saving
+Current
+saving
+Print all records having A at the beginning of second field
+root@MUM084:~/Desktop# awk '$2 ~ "^A"' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 1000020/05/2011 saving
+109 Arya 1600014/12/2010 Current
+ Print all records having A at the beginning of second field and g at the end of fifth
+field
+root@MUM084:~/Desktop# awk '$2 ~ "^A" && $5 ~ "g$"' bank.lst
+102 Anil 1000020/05/2011 saving
+Print records whose date of opening starts with 14 or the year ends with 12.
+root@MUM084:~/Desktop# awk '$4 ~ "^14" || $4~"12$"' bank.lst
+101 ADITYA 0 14/11/2000 CURRENT
+105 Jyotsna 5000 16/06/2012 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+204 Hina 3000014/02/2014 saving
+Print records whose date of opening is 20 and the year is 09.
+root@MUM084:~/Desktop# awk '$4 ~ /^20.*09/' bank.lst
+103 Naman 0 20/08/2009 current
+106 Mukesh 1400020/12/2009 Current
+ 
+Print records whose date of opening is 20 and the year is 09 and whose name starts with N
+root@MUM084:~/Desktop# awk '$4 ~ /^20.*09/ && $2 ~/^N/' bank.lst
+103 Naman 0 20/08/2009 current
+Print all lines whose length is more than 32
+root@MUM084:~/Desktop# awk 'length($0) > 32' bank.lst
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 1400020/12/2009 Current
+107 Vishal 1450030/11/2011 saving
+109 Arya 1600014/12/2010 Current
+203 Gargi 2000 21/01/2015 current
+205 Kalpana 4000 8/9/2007 Current
+Performing arithmatic operation:
+Print customer name, balance, date and 5% interest on balance
+root@MUM084:~/Desktop# awk '$5 == "saving" { printf "%20s %d %20s %f \n",$2,
+$3, $4, $3*0.05}' bank.lst
+ Anil 10000 20/05/2011 500.000000 
+ Ram 10000 15/08/2010 500.000000 
+ Jyotsna 5000 16/06/2012 250.000000 
+ Vishal 14500 30/11/2011 725.000000 
+ Bina 3000 11/03/2010 150.000000 
+ Hina 30000 14/02/2014 1500.000000 
+ Nikhil 7777 8/9/1999 388.850000 
+ 
+Use of BEGIN and END keywords:
+If u have something to print before processing the first line, for e.g. a heading then
+the BEGIN section is used. 
+Similarly, the END section is useful in printing something after processing is over.
+They are optional.
+Syntactical form:
+awk ' BEGIN{actions}
+/pattern/ {actions}
+END{actions}' file_name
+Note: Opening curly brackets should be on the same line of BEGIN and END
+root@MUM084:~/Desktop# awk 'BEGIN{
+printf "Records in the bank are :\n"
+}
+{print $1, $2, $3}' bank.lst
+Records in the bank are :
+101 ADITYA 0
+102 Anil 10000
+103 Naman 0
+104 Ram 10000
+105 Jyotsna 5000
+106 Mukesh 14000
+107 Vishal 14500
+108 Chirag 0
+109 Arya 16000
+110 Priya 130
+201 Bina 3000
+202 Diya 4000
+203 Gargi 2000
+204 Hina 30000
+205 Kalpana 4000
+301 Nikhil 7777
+root@MUM084:~/Desktop# awk 'BEGIN{
+printf "Records in the bank are :\n"
+}
+{print $1, $2, $3}
+> END{print "\n we displayed all records"}' bank.lst
+Records in the bank are :
+101 ADITYA 0
+102 Anil 10000
+103 Naman 0
+104 Ram 10000
+105 Jyotsna 5000
+106 Mukesh 14000
+107 Vishal 14500
+108 Chirag 0
+109 Arya 16000
+110 Priya 130
+201 Bina 3000
+202 Diya 4000
+203 Gargi 2000
+204 Hina 30000
+205 Kalpana 4000
+301 Nikhil 7777
+ we displayed all records
+Storing commands in file and using them:
+Store the command to calculate total balance of all accounts and printing it at the end.
+Use this command on bank.lst file
+root@MUM084:~/Desktop# cat >totalbal.awk
+{total+=$3}
+END{print"total balance is = ", total}
+root@MUM084:~/Desktop# awk -f totalbal.awk bank.lst
+total balance is = 120407
+What will happen if END section is not used in the above command?
+i.e. totalbal.awk file is modified as:
+{total+=$3}
+{print"total balance is = ", total} and then it is executed on bank.lst. We get
+following output:
+root@MUM084:~/Desktop# awk -f totalbal.awk bank.lst
+total balance is = 0
+total balance is = 10000
+total balance is = 10000
+total balance is = 20000
+total balance is = 25000
+total balance is = 39000
+total balance is = 53500
+total balance is = 53500
+total balance is = 69500
+total balance is = 69630
+total balance is = 72630
+total balance is = 76630
+total balance is = 78630
+total balance is = 108630
+total balance is = 112630
+total balance is = 120407
+Create file countrec.awk which contains actions to count no. Of records, to calculate total balance
+and average balance. Apply commands in this file to bank.lst
+root@MUM084:~/Desktop# cat > countrec.awk
+BEGIN{printf "Records are: \n"
+}
+{
+print $0
+c++
+sum+=$3
+}
+END{printf "\n Number of records are: %d", c
+printf "\n Total balance is %d", sum
+printf "\n Average balance is " %f", sum/c
+}
+root@MUM084:~/Desktop# awk -f countrec.awk bank.lst
+Records are: 
+101 ADITYA 0 14/11/2000 CURRENT
+102 Anil 1000020/05/2011 saving
+103 Naman 0 20/08/2009 current
+104 Ram 1000015/08/2010 saving
+105 Jyotsna 5000 16/06/2012 saving
+106 Mukesh 1400020/12/2009 Current
+107 Vishal 1450030/11/2011 saving
+108 Chirag 0 15/12/2012 Current
+109 Arya 1600014/12/2010 Current
+110 Priya 130 16/11/2009 Saving
+201 Bina 3000 11/03/2010 saving
+202 Diya 4000 13/04/2018 Saving
+203 Gargi 2000 21/01/2015 current
+204 Hina 3000014/02/2014 saving
+205 Kalpana 4000 8/9/2007 Current
+301 Nikhil 7777 8/9/1999 saving
+ Number of records are: 16
+ Total balance is 120407
+ Average balance is 7525.437500root@MUM084:~/Desktop# 
+Create file addnonzero.awk which contains actions to add only nonzero balance,
+display total balance and average balance. Apply commands in this file to bank.lst
+root@MUM084:~/Desktop# cat > addnonzero.awk
+$3==0{next}
+{total+=$3
+count++
+}
+END{avg=total/count
+printf"\n Total is : %d", total
+printf"\n average is: %d", avg
+printf"\n no. of customers is %d", count}
+root@MUM084:~/Desktop# awk -f addnonzero.awk bank.lst
+ Total is : 120407
+ average is: 9262
+ no. of customers is 13
+Update nonzero.awk file such that it adds balance of those customers whose account type is not
+'saving', displays their average and no of such records
+Hence the nonzero.awk now becomes:
+$5 ~/^s/{next}
+{total+=$3
+count++
+}
+END{avg=total/count
+printf"\n Total is : %d", total
+printf"\n average is: %d", avg
+printf"\n no. of customers is %d", count}
+root@MUM084:~/Desktop# awk -f addnonzero.awk bank.lst
+ Total is : 40130
+ average is: 4458
+ no. of customers is 9
+Using if.. else
+command to calculate 5% interest if balance more than 10000 else interest is 6%
+root@MUM084:~/Desktop# cat >interest
+{if ($3 > 10000) print "interest = " $3*0.05;
+else print "interest = " $3*0.06}
+root@MUM084:~/Desktop# awk -f interest bank.lst
+interest = 0
+interest = 600
+interest = 0
+interest = 600
+interest = 300
+interest = 700
+interest = 725
+interest = 0
+interest = 800
+interest = 7.8
+interest = 180
+interest = 240
+interest = 120
+interest = 1500
+interest = 240
+interest = 466.62
+Write command to calculate 5% interest if account type is 'current' else interest is 6%
+interest file is updated as below:
+{if ($5~/current/) print "interest = " $3*0.05;
+else print "interest = " $3*0.06}
+root@MUM084:~/Desktop# awk -f interest bank.lst
+interest = 0
+interest = 600
+interest = 0
+interest = 600
+interest = 300
+interest = 840
+interest = 870
+interest = 0
+interest = 960
+interest = 7.8
+interest = 180
+interest = 240
+interest = 100
+interest = 1800
+interest = 240
+interest = 466.62
+Write command to calculate 5% interest if account type is 'current' or 'Current' else
+interest is 6%
+interest file is updated as below:
+{if ($5~/[Cc]urrent/) print "interest = " $3*0.05;
+else print "interest = " $3*0.06}
+root@MUM084:~/Desktop# awk -f interest bank.lst
+interest = 0
+interest = 600
+interest = 0
+interest = 600
+interest = 300
+interest = 700
+interest = 870
+interest = 0
+interest = 800
+interest = 7.8
+interest = 180
+interest = 240
+interest = 100
+interest = 1800
+interest = 200
+interest = 466.62
+root@MUM084:~/Desktop# 
+Write command to calculate 5% interest if account type is not 'current' or 'Current'
+else interest is 6%
+interest file is updated as below:
+{if ($5!~/[Cc]urrent/) print "interest = " $3*0.05;
+else print "interest = " $3*0.06}
+root@MUM084:~/Desktop# awk -f interest bank.lst
+interest = 0
+interest = 500
+interest = 0
+interest = 500
+interest = 250
+interest = 840
+interest = 725
+interest = 0
+interest = 960
+interest = 6.5
+interest = 150
+interest = 200
+interest = 120
+interest = 1500
+interest = 240
+interest = 388.85
+root@MUM084:~/Desktop# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PERL Scripting
+Practical Extraction and Report Language:
+Perl is a general-purpose programming language originally developed for text manipulation and 
+now used for a wide range of tasks including system administration, web development, network 
+programming, GUI development, and more.
+Perl is an interpreted language, which means that your code can be run as is, without a compilation 
+stage that creates a non portable executable program.
+A Perl program consists of a sequence of declarations and statements, which run from the top to the 
+bottom. 
+Loops, subroutines, and other control structures allow you to jump around within the code. 
+Every simple statement must end with a semicolon (;).
+Command to check version of PERL installed:
+nagveni@nagveni-H55M-S2V:~$ perl -v
+This is perl 5, version 18, subversion 2 (v5.18.2) built for i686-linux-gnu-thread-multi-64int
+(with 44 registered patches, see perl -V for more detail)
+Copyright 1987-2013, Larry Wall
+Perl may be copied only under the terms of either the Artistic License or the
+GNU General Public License, which may be found in the Perl 5 source kit.
+Complete documentation for Perl, including FAQ lists, should be found on
+this system using "man perl" or "perldoc perl". If you have access to the
+Internet, point your browser at http://www.perl.org/, the Perl Home Page.
+Simple command to execute perl command at command prompt
+nagveni@nagveni-H55M-S2V:~$ perl -e 'print "Hello World\n"'
+Hello World
+Write a perl script to print Hello, world on screen
+#!/bin/perl
+# This will print "Hello, World"
+print "Hello, world\n";
+Save the above file as hello.pl
+Execute the script:
+nagveni@nagveni-H55M-S2V:~/Desktop$ ./hello.pl
+bash: ./hello.pl: Permission denied
+nagveni@nagveni-H55M-S2V:~/Desktop$ chmod 777 hello.pl
+nagveni@nagveni-H55M-S2V:~/Desktop$ ./hello.pl
+Hello, world
+You can use double quotes or single quotes around literal strings as follows:
+#!/bin/perl
+print "Hello, world\n";
+print 'Hello, world\n';
+Run the program:
+root@MUM084:~/Desktop# perl hello.pl
+Hello, world
+Hello, world\n
+Only double quotes interpolate variables and special characters such as newlines \n, whereas single
+quote does not interpolate any variable or special character.
+Perl has three basic data types: 
+1. scalars, 
+2. arrays of scalars, and 
+3. hashes of scalars, also known as associative arrays
+Scalar
+Scalars are simple variables. They are preceded by a dollar sign ($). 
+A scalar is either a number, a string, or a reference. 
+A reference is actually an address of a variable, which we will see in the upcoming chapters.
+Arrays
+Arrays are ordered lists of scalars that you access with a numeric index, which starts with 0. 
+They are preceded by an "at" sign (@).
+Hashes
+Hashes are unordered sets of key/value pairs that you access using the keys as subscripts. 
+They are preceded by a percent sign (%).
+To refer to a single element of a hash, you will use the hash variable name followed by the "key" 
+associated with the value in curly brackets.
+Sample program to assign values to variables
+#!/bin/perl
+$age = 25; # An integer assignment
+$name = "John Paul"; # A string 
+$salary = 1445.50; # A floating point
+@ages = (25, 30, 40); 
+@names = ("John Paul", "Lisa", "Kumar");
+print "Age = $age\n";
+print "Name = $name\n";
+print "Salary = $salary\n";
+print "\$ages[0] = $ages[0]\n";
+print "\$ages[1] = $ages[1]\n";
+print "\$ages[2] = $ages[2]\n";
+print "\$ages[-1] = $ages[-1]\n";
+print "\$ages[-2] = $ages[-2]\n";
+print "\$ages[-3] = $ages[-3]\n";
+print "\$names[0] = $names[0]\n";
+print "\$names[1] = $names[1]\n";
+print "\$names[2] = $names[2]\n";
+%data = ('John Paul', 45, 'Lisa', 30, 'Kumar', 40);
+print "\$data{'John Paul'} = $data{'John Paul'}\n";
+print "\$data{'Lisa'} = $data{'Lisa'}\n";
+print "\$data{'Kumar'} = $data{'Kumar'}\n";
+Run the program:
+root@MUM084:~/Desktop# perl var.pl
+Age = 25
+Name = John Paul
+Salary = 1445.5
+$ages[0] = 25
+$ages[1] = 30
+$ages[2] = 40
+$ages[-1] = 40
+$ages[-2] = 30
+$ages[-3] = 25
+$names[0] = John Paul
+$names[1] = Lisa
+$names[2] = Kumar
+$data{'John Paul'} = 45
+$data{'Lisa'} = 30
+$data{'Kumar'} = 40
+Variable Context
+Perl treats same variable differently based on Context, i.e., situation where a variable is being used. 
+Example:
+#!/bin/perl
+@names = ('John Paul', 'Lisa', 'Kumar');
+@copy = @names;
+$size = @names;
+print "Given names are : @copy\n";
+print "Number of names are : $size\n";
+Output:
+root@MUM084:~/Desktop# perl context.pl
+Given names are : John Paul Lisa Kumar
+Number of names are : 3
+Program for simple operations on variables:
+#!/bin/perl
+$str = "hello" . " world"; # Concatenates strings.
+$num = 5+10; # adds two numbers.
+$mul = 4*5; # multiplies two numbers.
+$mix = $str . $num; # concatenates string and number.
+print "str = $str\n";
+print "num = $num\n";
+print "mul = $mul\n";
+print "mix = $mix\n";
+Output:
+root@MUM084:~/Desktop# perl op.pl
+str = hello world
+num = 15
+mul = 20
+mix = hello world15
+Write a perl script to compute power of a given number
+#!/bin/perl
+print " Enter base number: ";
+$base=<>;
+print " Enter power to be calculated: ";
+$power=<>;
+$result=$base**$power;
+print " Result is : " . $result;
+Output:
+root@MUM084:~/Desktop# perl read.pl
+ Enter base number: 3
+ Enter power to be calculated: 2
+ Result is : 9
+Write a perl script to check whether a number is prime or not.
+#!/bin/perl
+print " Enter number to check: ";
+$num=<STDIN>;
+chop($num);
+$flag=0;
+for($i=2; $i<$num; $i++)
+{
+if ($num%$i ==0)
+{
+$flag=1;
+break;
+}
+}
+if ($flag==1)
+{
+print " $num is not prime\n ";
+}
+else
+{
+print "$num is prime\n";
+}
+Output:
+root@MUM084:~/Desktop# perl prime.pl
+ Enter number to check: 5 
+5 is prime
+root@MUM084:~/Desktop# perl prime.pl
+ Enter number to check: 4
+ 4 is not prime
